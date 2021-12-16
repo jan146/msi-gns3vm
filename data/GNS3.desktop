@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=GNS3
+Comment=GNS3 Graphical Network Simulator
+Exec=gns3 %f
+Icon=gns3
+Path=
+Terminal=false
+StartupNotify=false

@@ -16,6 +16,13 @@ Vagrant.configure("2") do |config|
   transferFile(config, "gns3_server.conf", $gns3_config_dir)
   transferFile(config, "gns3_gui.conf", $gns3_config_dir)
 
+  # create desktop icons
+  $desktop_dir = "/home/vagrant/Desktop/"
+  config.vm.provision "shell",
+    inline: "mkdir -p #{$desktop_dir}"
+  transferFile(config, "GNS3.desktop", $desktop_dir)
+  transferFile(config, "Midori.desktop", $desktop_dir)
+
   # port forwarding
   config.vm.network "forwarded_port", guest: 5900, host: 5900   # VNC Server (classic)
   config.vm.network "forwarded_port", guest: 5901, host: 5901   # VNC Server (HTML client, SSL secure)

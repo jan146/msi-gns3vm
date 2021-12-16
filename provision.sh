@@ -28,6 +28,8 @@ curl -o /usr/local/bin/vpcs -L https://github.com/GNS3/vpcs/releases/download/v0
 chmod +x /usr/local/bin/vpcs
 curl -o /usr/local/bin/ubridge -L https://github.com/GNS3/ubridge/releases/download/v0.9.15/ubridge
 chmod +x /usr/local/bin/ubridge
+chmod +x /home/vagrant/Desktop/GNS3.desktop 
+chmod +x /home/vagrant/Desktop/Midori.desktop 
 # start gns3 server daemon
 systemctl enable --now gns3server
 
