@@ -4,19 +4,27 @@ export DEBIAN_FRONTEND="noninteractive" # Disable installation tui prompts
 export VNC_PASSWD="vncpass1"            # Set vnc password
 export NOVNC_DIR="/usr/share/novnc"     # Set novnc directory
 
+# add non-free repo (needed for dynamips)
+apt update
+apt install -y software-properties-common
+add-apt-repository "deb http://deb.debian.org/debian buster non-free"
 # update mirrors
 apt update
 
 # install gns3 dependencies
 apt install -y python3-pip python3-pyqt5 python3-pyqt5.qtsvg \
 python3-pyqt5.qtwebsockets \
-qemu qemu-kvm qemu-utils libvirt-clients libvirt-daemon-system virtinst \
+qemu qemu-kvm qemu-utils libvirt-clients libvirt-daemon-system virtinst dynamips \
 wireshark xtightvncviewer apt-transport-https \
-ca-certificates curl gnupg2 software-properties-common
-
+ca-certificates curl gnupg2
 # install gns3 server and gui via pip
 pip3 install gns3-server==2.2.27
 pip3 install gns3-gui==2.2.27
+# configure gns3 environment
+curl -o /usr/local/bin/vpcs -L https://github.com/GNS3/vpcs/releases/download/v0.6.1/vpcs
+chmod +x /usr/local/bin/vpcs
+curl -o /usr/local/bin/ubridge -L https://github.com/GNS3/ubridge/releases/download/v0.9.15/ubridge
+chmod +x /usr/local/bin/ubridge
 
 # xfce (minimal)
 apt install -y \
