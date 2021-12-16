@@ -1,0 +1,12 @@
+[Unit]
+Description=GNS3 daemon service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/gns3server
+Restart=on-failure
+RestartSec=2
+SuccessExitStatus=3
+
+[Install]
+WantedBy=multi-user.target

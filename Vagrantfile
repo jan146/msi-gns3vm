@@ -7,6 +7,7 @@ Vagrant.configure("2") do |config|
   $systemd_dir = "/etc/systemd/system/"
   transferFile(config, "x11vnc.service", $systemd_dir)
   transferFile(config, "novnc.service", $systemd_dir)
+  transferFile(config, "gns3server.service", $systemd_dir)
 
   # transfer gns3 config files
   $gns3_config_dir = "/home/vagrant/.config/GNS3/2.2/"
@@ -18,6 +19,7 @@ Vagrant.configure("2") do |config|
   # port forwarding
   config.vm.network "forwarded_port", guest: 5900, host: 5900   # VNC Server (classic)
   config.vm.network "forwarded_port", guest: 5901, host: 5901   # VNC Server (HTML client, SSL secure)
+  config.vm.network "forwarded_port", guest: 3080, host: 3080   # GNS3 Server
 
   # run provisioning script
   config.vm.provision :shell do |shell|
