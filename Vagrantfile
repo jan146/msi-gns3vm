@@ -9,3 +9,14 @@ Vagrant.configure("2") do |config|
   end
 
 end
+
+# move src file (must be in data directory)
+# to /tmp and then to dest in "cfg"
+def transferFile(cfg, src, dest)
+  cfg.vm.provision "file",
+    source: "data/#{src}",
+    destination: "/tmp/#{src}"
+  cfg.vm.provision "shell",
+    inline: "mv /tmp/#{src} #{dest}"
+  return
+end
