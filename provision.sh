@@ -21,6 +21,9 @@ ca-certificates curl gnupg2
 pip3 install gns3-server==2.2.27
 pip3 install gns3-gui==2.2.27
 # configure gns3 environment
+yes yes | DEBIAN_FRONTEND=teletype dpkg-reconfigure wireshark-common
+usermod -aG libvirt,libvirt-qemu,kvm,wireshark vagrant
+sudo chown -R vagrant:vagrant "/home/vagrant/.config"
 curl -o /usr/local/bin/vpcs -L https://github.com/GNS3/vpcs/releases/download/v0.6.1/vpcs
 chmod +x /usr/local/bin/vpcs
 curl -o /usr/local/bin/ubridge -L https://github.com/GNS3/ubridge/releases/download/v0.9.15/ubridge
@@ -61,5 +64,7 @@ openssl req -new -x509 -nodes -subj "/C=SI/O=novnc" -out "$NOVNC_DIR"/utils/self
 # start novnc server
 systemctl enable --now novnc.service
 
-IPV4_ADDRESS=$(ip a show dev eth0 | grep "inet " | sed 's/.*inet //;s/\/24.*//')
-echo "local ipv4 address: $IPV4_ADDRESS"
+# IPV4_ADDRESS=$(ip a show dev eth0 | grep "inet " | sed 's/.*inet //;s/\/24.*//')
+# echo "local ipv4 address: $IPV4_ADDRESS"
+echo "Connect to the machine via web browser at url: https://localhost:5901/vnc.html (https://127.0.0.1:5901/vnc.html)"
+echo "or, if you're using a cloud service: https://cloud_ip:5901/vnc.html and replace 'cloud_ip' with the actual IP address of the server"
