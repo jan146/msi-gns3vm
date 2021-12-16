@@ -1,0 +1,6 @@
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "generic/debian10"
+  config.vm.provider = "libvirt"
+
+end

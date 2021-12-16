@@ -1,0 +1,2 @@
+# ignore entire .vagrant directory
+.vagrant*
