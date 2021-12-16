@@ -1,0 +1,14 @@
+[Unit]
+Description=noVNC server (HTML client)
+Requires=x11vnc.service
+After=x11vnc.service
+
+[Service]
+Type=simple
+ExecStart=/usr/share/novnc/utils/launch.sh --listen 5901 --vnc localhost:5900 --cert "/usr/share/novnc/utils/self.pem"
+Restart=on-failure
+RestartSec=2
+SuccessExitStatus=3
+
+[Install]
+WantedBy=graphical.target

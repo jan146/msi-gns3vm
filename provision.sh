@@ -2,6 +2,7 @@
 
 export DEBIAN_FRONTEND="noninteractive" # Disable installation tui prompts
 export VNC_PASSWD="vncpass1"            # Set vnc password
+export NOVNC_DIR="/usr/share/novnc"     # Set novnc directory
 
 # update mirrors
 apt update
@@ -40,12 +41,17 @@ systemctl set-default graphical.target
 systemctl restart lightdm
 
 # install vnc server
-apt install -y x11vnc
+apt install -y x11vnc novnc
 # configure password
 mkdir "$HOME"/.vnc
 x11vnc -storepasswd "$VNC_PASSWD" "$HOME"/.vnc/passwd
 # start the server
 systemctl enable --now x11vnc.service
+
+# generate ssl certificate for novnc
+openssl req -new -x509 -nodes -subj "/C=SI/O=novnc" -out "$NOVNC_DIR"/utils/self.pem -keyout "$NOVNC_DIR"/utils/self.pem -days 365
+# start novnc server
+systemctl enable --now novnc.service
 
 IPV4_ADDRESS=$(ip a show dev eth0 | grep "inet " | sed 's/.*inet //;s/\/24.*//')
 echo "local ipv4 address: $IPV4_ADDRESS"

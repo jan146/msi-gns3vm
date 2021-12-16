@@ -3,11 +3,14 @@ Vagrant.configure("2") do |config|
   config.vm.box = "generic/debian10"
   config.vm.provider = "libvirt"
 
-  # move vnc service file to /tmp and then to the proper location
-  transferFile(config, "x11vnc.service", "/etc/systemd/system/")
+  # move the service files to /tmp and then to the proper location
+  $systemd_dir = "/etc/systemd/system/"
+  transferFile(config, "x11vnc.service", $systemd_dir)
+  transferFile(config, "novnc.service", $systemd_dir)
 
   # port forwarding
   config.vm.network "forwarded_port", guest: 5900, host: 5900   # VNC Server (classic)
+  config.vm.network "forwarded_port", guest: 5901, host: 5901   # VNC Server (HTML client, SSL secure)
 
   # run provisioning script
   config.vm.provision :shell do |shell|
