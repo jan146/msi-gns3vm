@@ -88,6 +88,10 @@ runcmd:
   # install midori from another repo
   - "curl -o /var/cache/apt/archives/midori_7.0-2.1_amd64.deb -L http://archive.ubuntu.com/ubuntu/pool/universe/m/midori/midori_7.0-2.1_amd64.deb"
   - "apt install -y /var/cache/apt/archives/midori_7.0-2.1_amd64.deb"
+  # make desktop shortcuts executable
+  - "chmod +x /home/user/Desktop/GNS3.desktop"
+  - "chmod +x /home/user/Desktop/Midori.desktop"
+  - "sudo chown -R user:user /home/user/Desktop"
   # configure display manager
   - "systemctl set-default graphical.target"
   - "systemctl restart lightdm"
