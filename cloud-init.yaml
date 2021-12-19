@@ -80,7 +80,7 @@ runcmd:
   # configure gns3 environment
   - "yes yes | DEBIAN_FRONTEND=teletype dpkg-reconfigure wireshark-common"
   - "usermod -aG libvirt,libvirt-qemu,kvm,wireshark user"
-  - "sudo chown -R user:user /home/user/.config"
+  - "chown -R user:user /home/user/.config"
   - "curl -o /usr/local/bin/vpcs -L https://github.com/GNS3/vpcs/releases/download/v0.6.1/vpcs"
   - "chmod +x /usr/local/bin/vpcs"
   - "curl -o /usr/local/bin/ubridge -L https://github.com/GNS3/ubridge/releases/download/v0.9.15/ubridge"
@@ -91,7 +91,8 @@ runcmd:
   # make desktop shortcuts executable
   - "chmod +x /home/user/Desktop/GNS3.desktop"
   - "chmod +x /home/user/Desktop/Midori.desktop"
-  - "sudo chown -R user:user /home/user/Desktop"
+  - "chmod +x /home/user/Desktop/Wireshark.desktop"
+  - "chown -R user:user /home/user/Desktop"
   # configure display manager
   - "systemctl set-default graphical.target"
   - "systemctl restart lightdm"
@@ -323,6 +324,22 @@ write_files:
     Terminal=false
     StartupNotify=true
   path: /home/user/Desktop/Midori.desktop
+  defer: True
+  owner: user:user
+  permissions: '0771'
+# wireshark desktop shortcut
+- content: |
+    [Desktop Entry]
+    Version=1.0
+    Type=Application
+    Name=Wireshark
+    Comment=Network traffic analyzer
+    Exec=wireshark %f
+    Icon=wireshark
+    Path=
+    Terminal=false
+    StartupNotify=false
+  path: /home/user/Desktop/Wireshark.desktop
   defer: True
   owner: user:user
   permissions: '0771'

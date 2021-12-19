@@ -23,13 +23,16 @@ pip3 install gns3-gui==2.2.27
 # configure gns3 environment
 yes yes | DEBIAN_FRONTEND=teletype dpkg-reconfigure wireshark-common
 usermod -aG libvirt,libvirt-qemu,kvm,wireshark vagrant
-sudo chown -R vagrant:vagrant "/home/vagrant/.config"
+chown -R vagrant:vagrant "/home/vagrant/.config"
 curl -o /usr/local/bin/vpcs -L https://github.com/GNS3/vpcs/releases/download/v0.6.1/vpcs
 chmod +x /usr/local/bin/vpcs
 curl -o /usr/local/bin/ubridge -L https://github.com/GNS3/ubridge/releases/download/v0.9.15/ubridge
 chmod +x /usr/local/bin/ubridge
+# desktop icons
 chmod +x /home/vagrant/Desktop/GNS3.desktop 
 chmod +x /home/vagrant/Desktop/Midori.desktop 
+chmod +x /home/vagrant/Desktop/Wireshark.desktop 
+chown -R vagrant:vagrant "/home/vagrant/Desktop"
 # start gns3 server daemon
 systemctl enable --now gns3server
 

@@ -22,6 +22,7 @@ Vagrant.configure("2") do |config|
     inline: "mkdir -p #{$desktop_dir}"
   transferFile(config, "GNS3.desktop", $desktop_dir)
   transferFile(config, "Midori.desktop", $desktop_dir)
+  transferFile(config, "Wireshark.desktop", $desktop_dir)
 
   # port forwarding
   config.vm.network "forwarded_port", guest: 5900, host: 5900   # VNC Server (classic)
