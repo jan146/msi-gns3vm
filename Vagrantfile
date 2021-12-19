@@ -1,7 +1,7 @@
 Vagrant.configure("2") do |config|
 
   config.vm.box = "generic/debian10"
-  config.vm.provider = "libvirt"
+  config.vm.provider "libvirt"
 
   # move the service files to /tmp and then to the proper location
   $systemd_dir = "/etc/systemd/system/"

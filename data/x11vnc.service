@@ -5,7 +5,7 @@ After=lightdm.service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/x11vnc -auth /run/lightdm/root/:0 -rfbport 5900 -rfbauth root/.vnc/passwd -forever -shared -loop2000,5 -nodpms -geometry 1600x900
+ExecStart=/usr/bin/x11vnc -auth /run/lightdm/root/:0 -rfbport 5900 -rfbauth /root/.vnc/passwd -forever -shared -loop2000,5 -nodpms -geometry 1600x900
 Restart=on-failure
 RestartSec=2
 SuccessExitStatus=3
