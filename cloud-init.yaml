@@ -14,6 +14,12 @@ users:
 hostname: gns3vm    # set device hostname
 ssh_pwauth: True    # enable ssh password authentication
 
+# ssh -i ~/.ssh/id_rsa -4 -L vagrant_ip:5901:localhost:5901 -N -f user@user_ip
+# ssh-copy-id -i ~/.ssh/id_rsa.pub user@user_ip
+# unset SESSION_MANAGER
+# unset DBUS_SESSION_BUS_ADDRESS
+# dbus-launch startxfce4 &
+
 # update mirrors on first boot
 package_update: true
 # install all required packages
@@ -41,6 +47,8 @@ packages:
   # vnc tools
   - x11vnc
   - novnc
+
+### CONFIGURATION FILES ###
 
 # created before user creation (unless defer is set)
 write_files:
@@ -257,3 +265,10 @@ write_files:
   defer: True
   owner: user:user
   permissions: '0771'
+# barebones lightdm config file
+- content: |
+    [SeatDefaults]
+    user-session=xfce
+  path: /etc/lightdm/lightdm.conf
+  owner: root:root
+  permissions: '0644'
