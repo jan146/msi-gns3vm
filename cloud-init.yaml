@@ -1,1 +1,15 @@
 #cloud-config
+# add default user
+users:
+  - name: user
+    primary_group: user
+    groups: users, admin, cdrom, floppy, audio, video, plugdev, kvm, netdev, sudo
+    shell: /bin/bash
+    # plain_text_passwd: 'ubuntu'
+    passwd: $6$UbM29R6vsMA00IzS$X64ifYxzmSF89ekm2S2M0z35C9z2gA/KT9GvwK4NLc4kz9hZBepssIHMPBn9Xk14TVCviolkENKTCThTTGwdh/
+    sudo: ALL=(ALL) NOPASSWD:ALL    # enable paswordless sudo access
+    lock_passwd: false              # enable password login
+    no_user_group: false            # create home directory
+
+hostname: gns3vm    # set device hostname
+ssh_pwauth: True    # enable ssh password authentication
