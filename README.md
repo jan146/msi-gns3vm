@@ -37,7 +37,7 @@ You can continue with the [RDP section](README.md#Accessing%20the%20remote%deskt
 
 # cloud-init
 For cloud-init, all you need is the `cloud-init.yaml` file, which can be downloaded from Github on your browser or by cloning the repository (`git clone https://github.com/jan146/msi-gns3vm.git` and the file should be located inside the `msi-gns3vm` directory).<br>
-I've included an example for configuring a Microsoft Azure VM, however the process shouldn't be to different on other platforms.
+I've included an example for configuring a Microsoft Azure VM, however the process shouldn't be too different on other platforms.
 
 ### Microsoft Azure example
 
@@ -82,14 +82,14 @@ az vm open-port --resource-group myResourceGroup --name ults --port 5901
 You can continue with the [RDP section](README.md#Accessing%20the%20remote%desktop)
 
 # Accessing the remote desktop
-Now you can access the VM via your web browser. Head to https://localhost:5901/vnc.html or replace `localhost` with the appropriate IP address, if you're running this on a remote server.<br>
+Now you can access the VM via your web browser. Head to https://localhost:5901/vnc.html or replace `localhost` with the appropriate IP address, if you're running this on a remote server (cloud-init).<br>
 *Note:* Some browsers may block the connection because the SSL certificate is self-signed, so you might have to click some additional buttons to access the noVNC panel:
 
 <p align="center">
 	<img src="https://user-images.githubusercontent.com/51584002/146689712-da422f15-2ba7-43d0-920f-86dc346ce8e6.png" width=50%>
 </p>
 
-After that, enter the VNC server password (see [passwords subsection](README.md#Changing%20passwords) for details) and click *Connect*.<br>
+After that, enter the VNC server password (see [passwords section](README.md#Changing%20passwords) for details) and click *Connect*.<br>
 You should now see something like this (Vagrant):
 
 <p align="center">
@@ -129,7 +129,7 @@ Everything is preconfigured to have a short, easy to remember password out of th
 - Vagrant user: `vagrant`
 - Cloud-init user: `ubuntu`
 
-However it is very recommended to change them to something more robust. You can do this by SSH-ing into the VM (`vagrant ssh` for Vagrant and `ssh user@cloud_ip` for cloud-init, but replace `cloud_ip` with the IP address of the server) or by opening a terminal in the desktop environment and doing the following:
+However it is very recommended to change them to something more robust. You can do this by SSH-ing into the VM (`vagrant ssh` for Vagrant and `ssh user@cloud_ip` for cloud-init, but replace `cloud_ip` with the IP address of the server) or by opening a terminal in the remote desktop session and doing the following:
 
 - VNC server: `sudo x11vnc -storepasswd new_password /root/.vnc/passwd` (replace `new_password` with a sensible password)
 - Vagrant user: `sudo passwd vagrant` and enter a new password when prompted
