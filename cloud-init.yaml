@@ -85,6 +85,9 @@ runcmd:
   - "chmod +x /usr/local/bin/vpcs"
   - "curl -o /usr/local/bin/ubridge -L https://github.com/GNS3/ubridge/releases/download/v0.9.15/ubridge"
   - "chmod +x /usr/local/bin/ubridge"
+  # install midori from another repo
+  - "curl -o /var/cache/apt/archives/midori_7.0-2.1_amd64.deb -L http://archive.ubuntu.com/ubuntu/pool/universe/m/midori/midori_7.0-2.1_amd64.deb"
+  - "apt install -y /var/cache/apt/archives/midori_7.0-2.1_amd64.deb"
   # configure display manager
   - "systemctl set-default graphical.target"
   - "systemctl restart lightdm"
