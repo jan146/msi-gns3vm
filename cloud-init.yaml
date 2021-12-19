@@ -68,6 +68,29 @@ packages:
   - x11vnc
   - novnc
 
+# executed on first boot (after package installation)
+runcmd:
+  # prepare environment
+  - "export DEBIAN_FRONTEND='noninteractive'"
+  - "export VNC_PASSWD='vncpass1'"
+  - "export NOVNC_DIR='/usr/share/novnc'"
+  # configure display manager
+  - "systemctl set-default graphical.target"
+  - "systemctl restart lightdm"
+  # generate SSL certificate for noVNC
+  - "openssl req -new -x509 -nodes -subj '/C=SI/O=novnc' -out \"$NOVNC_DIR\"/utils/self.pem -keyout \"$NOVNC_DIR\"/utils/self.pem -days 365"
+  # make password for vnc server
+  - "mkdir /root/.vnc"
+  - "x11vnc -storepasswd \"$VNC_PASSWD\" /root/.vnc/passwd"
+  # enable required services
+  - "systemctl enable --now x11vnc"
+  - "systemctl enable --now novnc"
+  - "systemctl enable --now gns3server"
+
+# # executed on every boot
+# # executed before write_files and users
+# bootcmd:
+
 ### CONFIGURATION FILES ###
 
 # created before user creation (unless defer is set)
