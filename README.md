@@ -35,6 +35,52 @@ When the provisioning finishes, you will see an output of something like this:<b
 
 You can continue with the [RDP section](README.md#Accessing%20the%20remote%desktop)
 
+# cloud-init
+For cloud-init, all you need is the `cloud-init.yaml` file, which can be downloaded from Github on your browser or by cloning the repository (`git clone https://github.com/jan146/msi-gns3vm.git` and the file should be located inside the `msi-gns3vm` directory).<br>
+I've included an example for configuring a Microsoft Azure VM, however the process shouldn't be to different on other platforms.
+
+### Microsoft Azure example
+
+cloud-init is meant to be run on a cloud service provider. This configuration has been tested on Microsoft's Azure platform using the Ubuntu LTS image, however it may not work as well on other platforms or images.
+
+Firstly, you need to <a href="https://docs.microsoft.com/en-us/cli/azure/install-azure-cli">install the azure-cli</a> tool.<br>
+Then, open your terminal and enter `az login`. A browser tab should open where you can log into your Microsoft Azure account.<br>
+
+After that, you need to create a <a href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal">resource group</a>, which can be done like this:
+
+```bash
+az group create --name myResourceGroup --location germanywestcentral	# location can be changed if needed
+```
+
+Once the resource group has been created, you can create your virtual machine (make sure the path to `cloud-init.yaml` is correct):
+
+```bash
+az vm create \
+	--resource-group myResourceGroup \
+	--name ults \
+	--image UbuntuLTS \
+	--custom-data /path/to/cloud-init.yaml \
+	--generate-ssh-keys
+```
+
+After the VM is created, you should see an output like this:
+
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/51584002/146692118-ab07edb5-1865-417e-aa85-22bdd7dbaa8f.png" width=80%>
+</p>
+
+**Important:** take note of the `publicIpAddress` field, as you will need to use it to access the server.
+The VM should now begin with the cloud-init configuration stage, therefore the noVNC service may not be available for a few minutes (if you're eager to know if it is done provisioning cloud-init, you can SSH into the server and issue `cloud-init status` to see if it's done).
+
+Before accessing the remote desktop session in your browser, you need to also open a port (noVNC is configured to use port 5901), so the server will be accessible over the internet.
+This can be done like so:
+
+```bash
+az vm open-port --resource-group myResourceGroup --name ults --port 5901
+```
+
+You can continue with the [RDP section](README.md#Accessing%20the%20remote%desktop)
+
 # Accessing the remote desktop
 Now you can access the VM via your web browser. Head to https://localhost:5901/vnc.html or replace `localhost` with the appropriate IP address, if you're running this on a remote server.<br>
 *Note:* Some browsers may block the connection because the SSL certificate is self-signed, so you might have to click some additional buttons to access the noVNC panel:
@@ -88,3 +134,5 @@ However it is very recommended to change them to something more robust. You can 
 - VNC server: `sudo x11vnc -storepasswd new_password /root/.vnc/passwd` (replace `new_password` with a sensible password)
 - Vagrant user: `sudo passwd vagrant` and enter a new password when prompted
 - Cloud-init user: `sudo passwd user` and enter a new password when prompted
+
+Additionally, you could import your SSH keys to avoid entering passwords everytime you SSH into the VMs.
