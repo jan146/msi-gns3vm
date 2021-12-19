@@ -13,3 +13,31 @@ users:
 
 hostname: gns3vm    # set device hostname
 ssh_pwauth: True    # enable ssh password authentication
+
+# update mirrors on first boot
+package_update: true
+# install all required packages
+packages:
+  - xfce4
+  - lightdm
+# - libpam-kwallet4
+# - libpam-kwallet5
+  - libxfce4ui-utils
+  - xfce4-appfinder
+  - xfce4-panel
+  - xfce4-pulseaudio-plugin
+  - xfce4-whiskermenu-plugin
+  - xfce4-session
+  - xfce4-settings
+  - xfce4-terminal
+  - xfconf
+  - xfdesktop4
+  - xfwm4
+  - adwaita-qt
+  - qt5ct
+  - geany
+  - thunar
+# - midori
+  # vnc tools
+  - x11vnc
+  - novnc
