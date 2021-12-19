@@ -41,3 +41,219 @@ packages:
   # vnc tools
   - x11vnc
   - novnc
+
+# created before user creation (unless defer is set)
+write_files:
+# x11vnc service file
+- content: |
+    [Unit]
+    Description=x11vnc VNC Server for X11
+    Requires=lightdm.service
+    After=lightdm.service
+
+    [Service]
+    Type=simple
+    ExecStart=/usr/bin/x11vnc -auth /run/lightdm/root/:0 -rfbport 5900 -rfbauth root/.vnc/passwd -forever -shared -loop2000,5 -nodpms -geometry 1600x900
+    Restart=on-failure
+    RestartSec=2
+    SuccessExitStatus=3
+
+    [Install]
+    WantedBy=graphical.target
+  path: /etc/systemd/system/x11vnc.service
+  owner: root:root
+  permissions: '0644'
+# noVNC service file
+- content: |
+    [Unit]
+    Description=noVNC server (HTML client)
+    Requires=x11vnc.service
+    After=x11vnc.service
+
+    [Service]
+    Type=simple
+    ExecStart=/usr/share/novnc/utils/launch.sh --listen 5901 --vnc localhost:5900 --cert "/usr/share/novnc/utils/self.pem"
+    Restart=on-failure
+    RestartSec=2
+    SuccessExitStatus=3
+
+    [Install]
+    WantedBy=graphical.target
+  path: /etc/systemd/system/novnc.service
+  owner: root:root
+  permissions: '0644'
+# gns3 service file
+- content: |
+    [Unit]
+    Description=GNS3 daemon service
+
+    [Service]
+    Type=simple
+    ExecStart=/usr/local/bin/gns3server
+    Restart=on-failure
+    RestartSec=2
+    SuccessExitStatus=3
+
+    [Install]
+    WantedBy=multi-user.target
+  path: /etc/systemd/system/gns3server.service
+  owner: root:root
+  permissions: '0644'
+# gns3 gui config file
+- content: |
+    {
+        "Builtin": {
+            "default_nat_interface": "virbr0"
+        },
+        "Docker": {
+            "containers": []
+        },
+        "Dynamips": {
+            "allocate_aux_console_ports": false,
+            "dynamips_path": "/usr/bin/dynamips",
+            "ghost_ios_support": true,
+            "mmap_support": true,
+            "sparse_memory_support": true
+        },
+        "GraphicsView": {
+            "default_label_color": "#000000",
+            "default_label_font": "TypeWriter,10,-1,5,75,0,0,0,0,0",
+            "default_note_color": "#000000",
+            "default_note_font": "TypeWriter,10,-1,5,75,0,0,0,0,0",
+            "draw_link_status_points": true,
+            "draw_rectangle_selected_item": false,
+            "drawing_grid_size": 25,
+            "grid_size": 75,
+            "limit_size_node_symbols": true,
+            "scene_height": 1000,
+            "scene_width": 2000,
+            "show_grid": false,
+            "show_grid_on_new_project": false,
+            "show_interface_labels": false,
+            "show_interface_labels_on_new_project": false,
+            "show_layers": false,
+            "snap_to_grid": false,
+            "snap_to_grid_on_new_project": false,
+            "zoom": null
+        },
+        "IOU": {
+            "iourc_content": "",
+            "license_check": true
+        },
+        "MainWindow": {
+            "check_for_update": true,
+            "debug_level": 0,
+            "delay_console_all": 500,
+            "direct_file_upload": false,
+            "experimental_features": false,
+            "geometry": "AdnQywACAAAAAAAAAAAAHwAAA98AAALuAAAAAwAAADwAAAPcAAAC6wAAAAAAAAAABQA=",
+            "hdpi": false,
+            "hide_getting_started_dialog": false,
+            "hide_new_template_button": false,
+            "hide_setup_wizard": true,
+            "last_check_for_update": 1639402984,
+            "multi_profiles": false,
+            "overlay_notifications": true,
+            "recent_files": [],
+            "recent_projects": [],
+            "send_stats": true,
+            "spice_console_command": "remote-viewer spice://%h:%p",
+            "state": "AAAA/wAAAAD9AAAAAwAAAAAAAAAAAAAAAPwCAAAAAfsAAAAiAHUAaQBOAG8AZABlAHMARABvAGMAawBXAGkAZABnAGUAdAAAAAAA/////wAAAIsA////AAAAAQAAAQAAAAF7/AIAAAAC+wAAADYAdQBpAFQAbwBwAG8AbABvAGcAeQBTAHUAbQBtAGEAcgB5AEQAbwBjAGsAVwBpAGQAZwBlAHQBAAAAPgAAALsAAABZAP////sAAAA0AHUAaQBDAG8AbQBwAHUAdABlAFMAdQBtAG0AYQByAHkARABvAGMAawBXAGkAZABnAGUAdAEAAAD/AAAAugAAAFkA////AAAAAwAAA54AAADT/AEAAAAB+wAAACYAdQBpAEMAbwBuAHMAbwBsAGUARABvAGMAawBXAGkAZABnAGUAdAEAAAA8AAADngAAAEYAB///AAACmAAAAXsAAAAEAAAABAAAAAgAAAAI/AAAAAIAAAAAAAAAAQAAACIAdQBpAEIAcgBvAHcAcwBlAHIAcwBUAG8AbwBsAEIAYQByAwAAAAD/////AAAAAAAAAAAAAAACAAAAAwAAACAAdQBpAEcAZQBuAGUAcgBhAGwAVABvAG8AbABCAGEAcgEAAAAA/////wAAAAAAAAAAAAAAIAB1AGkAQwBvAG4AdAByAG8AbABUAG8AbwBsAEIAYQByAQAAAF7/////AAAAAAAAAAAAAAAmAHUAaQBBAG4AbgBvAHQAYQB0AGkAbwBuAFQAbwBvAGwAQgBhAHIBAAABkP////8AAAAAAAAAAA==",
+            "stats_visitor_id": "e17d5b8a-1b9b-4662-8cee-9dcc650a4cb2",
+            "style": "Charcoal",
+            "symbol_theme": "Classic",
+            "telnet_console_command": "xfce4-terminal --tab -T \"%d\" -e \"telnet %h %p\"",
+            "vnc_console_command": "vncviewer %h:%p"
+        },
+        "NodesView": {
+            "nodes_view_filter": 0
+        },
+        "PacketCapture": {
+            "command_auto_start": true,
+            "packet_capture_analyzer_command": "",
+            "packet_capture_reader_command": "tail -f -c +0b %c | wireshark -o \"gui.window_title:%d\" -k -i -"
+        },
+        "Qemu": {
+            "enable_hardware_acceleration": true,
+            "require_hardware_acceleration": true
+        },
+        "VMware": {
+            "block_host_traffic": false,
+            "host_type": "ws",
+            "vmnet_end_range": 100,
+            "vmnet_start_range": 2,
+            "vmrun_path": ""
+        },
+        "VPCS": {
+            "vpcs_path": "/usr/local/bin/vpcs"
+        },
+        "VirtualBox": {
+            "vboxmanage_path": ""
+        },
+        "type": "settings",
+        "version": "2.2.27"
+    }
+  path: /home/user/.config/GNS3/2.2/gns3_gui.conf
+  defer: True
+  owner: user:user
+  permissions: '0664'
+# gns3 server config file
+- content: |
+    [Server]
+    path = /usr/local/bin/gns3server
+    ubridge_path = /usr/local/bin/ubridge
+    host = localhost
+    port = 3080
+    images_path = /home/vagrant/GNS3/images
+    projects_path = /home/vagrant/GNS3/projects
+    appliances_path = /home/vagrant/GNS3/appliances
+    additional_images_paths = 
+    symbols_path = /home/vagrant/GNS3/symbols
+    configs_path = /home/vagrant/GNS3/configs
+    report_errors = True
+    auto_start = False
+    allow_console_from_anywhere = False
+    auth = True
+    user = admin
+    password = z7HAOS8xBv4YfeE2i8nXdmj3yQ4Jhpz8vaJh4csvMciHP23j4PZwE6BZMXNfHiyu
+    protocol = http
+    console_start_port_range = 5000
+    console_end_port_range = 10000
+    udp_start_port_range = 10000
+    udp_end_port_range = 20000
+  path: /home/user/.config/GNS3/2.2/gns3_server.conf
+  defer: True
+  owner: user:user
+  permissions: '0664'
+# gns3 desktop shortcut
+- content: |
+    [Desktop Entry]
+    Version=1.0
+    Type=Application
+    Name=GNS3
+    Comment=GNS3 Graphical Network Simulator
+    Exec=gns3 %f
+    Icon=gns3
+    Path=
+    Terminal=false
+    StartupNotify=false
+  path: /home/user/Desktop/GNS3.desktop
+  defer: True
+  owner: user:user
+  permissions: '0771'
+# web browser desktop shortcut
+- content: |
+    [Desktop Entry]
+    Version=1.0
+    Type=Application
+    Name=Midori
+    Comment=Browse the Web
+    Exec=midori %U
+    Icon=midori
+    Path=
+    Terminal=false
+    StartupNotify=true
+  path: /home/user/Desktop/Midori.desktop
+  defer: True
+  owner: user:user
+  permissions: '0771'
